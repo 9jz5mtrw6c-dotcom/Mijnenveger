@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Mijnenveger Flags</title>
+<style>
+:root{--bg:#fbe9ef;--card:#fff;--ink:#2b2229;--mute:#6b5a64;--line:#ecd2dc;--cell:#efe4e8;--green:#3c9e68;--greenSoft:#d3eddd;--greenInk:#14502f;--blue:#456f9c;--blueSoft:#dde9f5;--btn:#2f6f8f;--btnInk:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 18px/1.4 ui-rounded,"SF Pro Rounded",system-ui,sans-serif;min-height:100%}
+#app{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+h1{font-size:28px;font-weight:800;margin:6px 0 2px}
+h2{font-size:20px;font-weight:800;margin:24px 0 8px}
+p{margin:0}
+.sub{color:var(--mute)}
+.logo{display:block;width:100%;max-width:340px;margin:0 auto;mix-blend-mode:multiply}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:16px;margin-top:14px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-head b{font-size:19px;font-weight:800;text-transform:capitalize}
+.nav{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}@media(max-width:360px){.grid{gap:3px}.day{font-size:13px;min-width:0}}
+.wd{text-align:center;font-size:14px;color:var(--mute);font-weight:700}
+.day{aspect-ratio:1;border-radius:12px;background:var(--cell);border:2px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--mute);padding:0}
+.day.blank{background:none}
+.day.done{background:var(--green);color:#fff}
+.day.today{border-color:var(--ink)}
+.day small{font-size:12px;line-height:1}
+.info{min-height:26px;margin-top:10px;text-align:center;color:var(--mute);font-size:16px}
+.tiles{display:grid;gap:12px;margin-top:12px}
+.tile{display:grid;grid-template-columns:64px 1fr;column-gap:14px;align-items:center;background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:12px 16px;text-align:left;min-height:88px}
+.tile .ic{width:64px;height:64px;border-radius:16px;background:var(--blueSoft);color:var(--blue);display:grid;place-items:center;font-size:32px}
+.tile b{font-size:19px;font-weight:800}
+.tile .s{font-size:15px;color:var(--mute)}
+.tile.done{border-color:var(--green)}
+.tile.done .ic{background:var(--greenSoft);color:var(--green)}
+.top{display:flex;align-items:center;gap:12px;justify-content:space-between}
+.ghost{background:none;border:none;padding:10px 6px;color:var(--mute);font-weight:700}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--cell)}
+.dots i.on{background:var(--green)}
+.dots i.cur{background:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.chip{min-width:56px;min-height:48px;padding:6px 16px;border-radius:14px;border:2px solid var(--line);background:var(--card);font-weight:800}
+.chip[aria-pressed="true"]{background:var(--blueSoft);border-color:var(--blue)}
+.btn{display:block;width:100%;margin-top:14px;min-height:54px;border:none;border-radius:16px;background:var(--btn);color:var(--btnInk);font-weight:800;font-size:19px}
+.btn.alt{background:var(--cell);color:var(--ink)}
+.hide{display:none}
+.q{font-size:34px;font-weight:800;text-align:center;margin:10px 0 18px}
+.qcard .q.w{font-size:24px}
+.ansi{width:100%;font:800 30px ui-rounded,system-ui,sans-serif;text-align:center;padding:10px;border:2px solid var(--line);border-radius:16px;background:#fff;color:var(--ink)}
+.ansi.ok{border-color:var(--green);background:var(--greenSoft)}
+.ansi.bad{border-color:var(--blue);background:var(--blueSoft)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.eq{font-weight:800;font-size:20px;margin:2px 0 8px}
+.opts{display:grid;gap:10px}
+.opt{min-height:56px;border-radius:16px;border:2px solid var(--line);background:var(--card);font-weight:800;font-size:21px}
+.opt.right{background:var(--greenSoft);border-color:var(--green);color:var(--greenInk)}
+.opt.wrong{background:var(--blueSoft);border-color:var(--blue)}
+.fb{min-height:30px;text-align:center;margin-top:14px;font-weight:800}
+.fb.ok{color:#14602f}
+.fb.try{color:var(--blue)}
+.big{font-size:56px;text-align:center;margin-top:8px}
+.center{text-align:center}
+.txt{display:block;text-align:left;font-size:19px;font-weight:600;line-height:1.5;margin-bottom:14px}
+.q svg{display:block;margin:0 auto;color:var(--ink)}
+.fld{display:block;width:100%;margin-top:12px;padding:12px;border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);font:500 16px ui-rounded,system-ui,sans-serif}
+.dr{border-top:1.5px solid var(--line);padding:10px 0;font-size:16px}
+.dr:first-child{border-top:none}
+.tt{display:flex;justify-content:space-between;align-items:center;font-size:17px;padding:5px 0;gap:8px}
+.lvb{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);font-weight:800}
+.small{font-size:14px;color:var(--mute);line-height:1.45}
+.sd{display:grid;gap:0;margin:14px auto;max-width:360px;border:3px solid var(--ink)}
+.sc{aspect-ratio:1;width:100%;text-align:center;font:800 22px ui-rounded,system-ui,sans-serif;border:1px solid var(--line);background:#fff;color:var(--ink);display:grid;place-items:center;padding:0}
+.sc.given{background:var(--cell)}
+.sc.br{border-right:3px solid var(--ink)}
+.sc.bb{border-bottom:3px solid var(--ink)}
+.info-l p{margin:8px 0}
+.cf{position:fixed;top:-14px;width:9px;height:14px;border-radius:2px;z-index:50;pointer-events:none;animation:fall 1.35s ease-in forwards}
+@keyframes fall{to{transform:translate(var(--dx),105vh) rotate(540deg)}}
+.oval{display:inline-block;margin:0 auto 14px;padding:16px 44px;border:3px solid var(--blue);border-radius:50%;background:var(--blueSoft);font-size:30px;font-weight:800}
+.wcs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chip.right{background:var(--greenSoft);border-color:var(--green);color:var(--greenInk)}
+.chip.wrong{background:var(--blueSoft);border-color:var(--blue)}
+.btn:disabled{opacity:.55;cursor:default}
+.steps{text-align:left;margin:10px 0 0;padding-left:22px;font-size:17px}
+.mv img{max-width:100%;max-height:300px;border-radius:14px}
+.mot{margin-top:10px;font-weight:800}
+.g1 .q,.g2 .q{font-size:40px}.g2 .qcard .q.w{font-size:28px}.g2 .opt{min-height:78px;font-size:34px}.g2 .btn{min-height:62px}#spk{margin:0 0 8px}
+.gsw{display:flex;gap:10px;margin:10px 0 4px}.gsw .chip{flex:1;min-height:56px;font-size:20px;margin:0}.g2 #app{max-width:760px}
+.mn{display:inline-block;margin:3px;padding:8px 14px;border-radius:999px;border:3px solid #2b2229;background:#ffe9a8;font-weight:800}
+.opt.ol,.g2 .opt.ol{font-size:20px;min-height:64px;line-height:1.25}.g2 .qcard .q.w{font-size:24px}#app.wide,.g2 #app.wide{max-width:980px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#2b2229;color:#fff;padding:12px 18px;border-radius:999px;font-weight:700;z-index:99;box-shadow:0 4px 14px rgba(0,0,0,.25);text-align:center}
+.gsw{flex-wrap:wrap}.gsw .chip{flex:1 1 0;min-width:0;padding-left:8px;padding-right:8px;font-size:clamp(14px,4.4vw,20px)}
+#pad{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:10px 0}.pk{min-height:52px;font-size:22px;font-weight:800;border-radius:12px;border:2px solid #e5d3dd;background:#fff;color:#2b2229;touch-action:manipulation}.pk:active{background:#dbe7f3}.ansi[readonly],.sc[readonly],.fld[readonly]{caret-color:transparent;cursor:default}.ansi.act,.sc.act{outline:3px solid #4f7aa6}@media (orientation:landscape) and (max-height:560px){#pad{grid-template-columns:repeat(12,1fr)}.pk{min-height:44px;font-size:20px}}
+
+#mus *{pointer-events:none}
+
+.g1 .qcard .q.w{font-size:28px}.g1 .opt{min-height:78px;font-size:34px}.g1 .btn{min-height:62px}.g1 #app{max-width:760px}.g1 .opt.ol{font-size:20px;min-height:64px}#app.wide,.g1 #app.wide{max-width:980px}
+.gsw{flex-wrap:wrap}.gsw .chip{min-width:72px}
+
+.about details{margin:8px 0;border-top:1px solid #e9d8df;padding-top:8px}.about summary{font-weight:800;cursor:pointer;min-height:44px;display:flex;align-items:center}.about p{line-height:1.5;margin:8px 0}
+.chip[aria-pressed=true]{color:#1f3f66}
+
+.day{min-width:0}.btn:disabled{opacity:1;background:#d9cdd3;color:#5a4a52}.dots{flex-shrink:1;min-width:0;flex-wrap:nowrap}.dots i{flex-shrink:1}
+.day.done{background:#2e8554!important}
+
+.cr{text-align:center;margin:18px 0 6px;color:var(--mute,#6b5a63)}
+
+#welkom{position:fixed;inset:0;z-index:9999;background:var(--bg,#fbe9ef);overflow:auto;-webkit-overflow-scrolling:touch;display:flex;justify-content:center;padding:16px}
+#welkom .wk{max-width:560px;width:100%;margin:auto 0}#welkom .logo{display:block;margin:0 auto 8px;max-width:220px;height:auto}#welkom h1{text-align:center}#welkom ul{padding-left:20px;line-height:1.5}#welkom li{margin:8px 0}
+
+#blov{position:fixed;inset:0;z-index:10001;pointer-events:none;background:rgb(255,150,45);mix-blend-mode:multiply;display:none}
+#slotov{position:fixed;inset:0;z-index:10000;background:var(--bg,#fbe9ef);overflow:auto;display:flex;justify-content:center;padding:16px}
+#slotov .wk{max-width:480px;width:100%;margin:auto 0;text-align:center}#slotov h1{margin:0 0 8px}#slotov input{width:100%;font-size:20px;padding:12px;border-radius:12px;border:2px solid #cbd5e1;margin:10px 0;box-sizing:border-box}
+.top .maan{margin-left:auto;min-width:44px}.top .maan~#mus{margin-left:0!important}.maan *{pointer-events:none}
+
+h1:focus,h1:focus-visible{outline:none}
+.mfh{display:flex;align-items:center;gap:12px;margin:4px 0 2px}.mfh h1{margin:0}
+.mf-bomb svg{width:34px;height:34px;margin:auto}
+#app.wide{max-width:980px}
+
+/* ---------- Mijnenveger Flags ---------- */
+.mf{background:linear-gradient(#41639a,#22355a);border-radius:18px;padding:10px;display:grid;gap:10px;grid-template-columns:minmax(0,1fr);grid-template-areas:"blue" "board" "red" "mid";color:#fff;margin-top:10px;box-shadow:0 6px 18px rgba(20,30,60,.25)}
+.mf.solo{grid-template-areas:"red" "board" "mid"}
+.mf-bw{grid-area:board;position:relative;background:#14213b;border:3px solid #0c1527;border-radius:12px;padding:4px;width:100%;max-width:640px;justify-self:center}
+.mf-bd{display:grid;gap:2px;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.mf-c{aspect-ratio:1;min-width:0;min-height:0;border:0;padding:0;border-radius:3px;display:grid;place-items:center;font:900 clamp(11px,3.3vw,20px)/1 ui-rounded,"SF Pro Rounded",system-ui,sans-serif;color:#1f2a44;position:relative}
+.mf-c svg{width:80%;height:80%;display:block}
+.mf-c.c{background:linear-gradient(160deg,#e3f5ff 0%,#9ad6f7 50%,#5cb0e6 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),inset 0 -2px 0 rgba(0,50,110,.28)}
+.mf-c.c:hover{filter:brightness(1.07)}
+.mf-c.o{background:linear-gradient(160deg,#fff6b5 0%,#ffdc45 55%,#f3c21a 100%);box-shadow:inset 0 -1px 0 rgba(140,90,0,.25)}
+.mf-c.f{background:linear-gradient(160deg,#f1faff,#bfe3f8);box-shadow:inset 0 0 0 1px rgba(0,60,120,.15);animation:mfpop .28s ease-out}
+.mf-c.x{background:#ff6b6b}
+.mf-c.l{outline:3px solid #ff2d2d;outline-offset:-3px;z-index:1}
+.mf-c.pv{box-shadow:inset 0 0 0 3px #ff8c00;filter:brightness(1.12)}
+.mf-c.n1{color:#1f4fd6}.mf-c.n2{color:#1d8a2d}.mf-c.n3{color:#d81f1f}.mf-c.n4{color:#162a85}.mf-c.n5{color:#8a1c1c}.mf-c.n6{color:#0d7f84}.mf-c.n7{color:#111}.mf-c.n8{color:#666}
+@keyframes mfpop{0%{transform:scale(.6)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.mf-c.f{animation:none}}
+.mf-p{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:14px;background:rgba(0,0,0,.24);border:2px solid transparent;transition:background .2s,border-color .2s}
+.mf-r{grid-area:red}.mf-b{grid-area:blue}
+.mf-av{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-size:23px;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.mf-r .mf-av{background:linear-gradient(#ff8a7a,#d8323a)}.mf-b .mf-av{background:linear-gradient(#7cbcff,#1d6bd0)}
+.mf-nm{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15}
+.mf-nm b{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mf-nm small{font-size:13px;font-weight:700;color:#ffe27a;min-height:15px}
+.mf-sc{display:flex;align-items:center;gap:3px;font-size:22px;font-weight:900;white-space:nowrap}
+.mf-sc svg{width:26px;height:26px}
+.mf-bomb{width:46px;height:46px;flex:none;border-radius:12px;border:2px solid rgba(255,255,255,.3);background:rgba(0,0,0,.25);font-size:24px;padding:0;color:#fff}
+.mf-bomb:disabled{opacity:.35;cursor:default}
+.mf-bomb.act{background:#ff8c00;border-color:#ffd84d}
+.mf-p.on{border-color:#ffd84d;background:rgba(255,216,77,.17);box-shadow:0 0 0 3px rgba(255,216,77,.25)}
+.mf-m{grid-area:mid;text-align:center;font-size:15px;color:#dce7ff;min-height:22px;line-height:1.35}
+.mf-m b{color:#fff}
+.mf-end{position:absolute;inset:0;display:grid;place-items:center;background:rgba(10,18,36,.55);border-radius:9px;padding:10px}
+.mf-end>div{background:#fff;color:#2b2229;border-radius:18px;padding:16px 18px;text-align:center;width:min(320px,100%);box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.mf-end h2{margin:0 0 4px;font-size:24px}
+.mf-end .btn{margin-top:10px;min-height:46px;font-size:17px}
+@media(min-width:820px){
+ .mf{grid-template-columns:210px minmax(0,640px);grid-template-rows:auto 1fr auto;grid-template-areas:"red board" "mid board" "blue board";justify-content:center;padding:14px;gap:14px}
+ .mf.solo{grid-template-areas:"red board" "mid board" ". board"}
+ .mf-p{flex-direction:column;text-align:center;padding:14px 10px;gap:8px}
+ .mf-av{width:70px;height:70px;font-size:40px;border-radius:16px}
+ .mf-nm{align-items:center}.mf-nm b{font-size:20px}
+ .mf-sc{font-size:30px}.mf-sc svg{width:34px;height:34px}
+ .mf-m{align-self:center;font-size:16px}
+}
+
+/* ---------- klassieke MSN-spellenstijl ---------- */
+html,body{background:linear-gradient(#f4f7fb,#cdd9ea) fixed;min-height:100%}
+body{font:400 16px/1.4 Tahoma,Verdana,"Segoe UI",system-ui,sans-serif;color:#1b2a44}
+.win{max-width:1000px;margin:12px auto 24px;border:1px solid #7f97bd;border-radius:10px;background:#eef3fa;box-shadow:0 6px 22px rgba(30,50,90,.25);overflow:hidden}
+.msnbar{display:flex;align-items:center;gap:10px;padding:8px 14px;background:linear-gradient(#5b84c4 0%,#2c5596 45%,#1d3f78 55%,#2a5294 100%);border-bottom:2px solid #13284d;color:#fff}
+.msnbar b{font:700 20px/1.1 Tahoma,Verdana,sans-serif;text-shadow:0 1px 2px rgba(0,0,0,.5);letter-spacing:.2px}
+.msnbar .tab{margin-left:auto;font:700 11px Tahoma,Verdana,sans-serif;text-transform:uppercase;padding:5px 10px;border-radius:4px;background:linear-gradient(#f6f8fc,#c9d6ea);color:#1d3f78;border:1px solid #0f2246;white-space:nowrap}
+.win #app{max-width:none;padding:12px 14px 18px;background:#eef3fa}
+.win #app.wide{max-width:none}
+.win h1:not(.keep){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.mfh{display:none}
+.sub{color:#3d4f6e}
+h2{font:700 17px Tahoma,Verdana,sans-serif;color:#1d3f78;margin:18px 0 6px;text-transform:uppercase;letter-spacing:.3px}
+.btn{border-radius:7px;min-height:46px;font:700 16px Tahoma,Verdana,sans-serif;background:linear-gradient(#7fb3ef 0%,#3f7fd6 48%,#2a66be 52%,#3a78cf 100%);border:1px solid #1b4a8f;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.5);margin-top:0}
+.btn.alt{background:linear-gradient(#ffffff,#dfe7f3 50%,#ccd8ea 52%,#e1e9f5);color:#1d3f78;border:1px solid #8aa1c6;text-shadow:none}
+.btn.rs{background:linear-gradient(#6b7280,#3a404c 50%,#2b3038 52%,#3d434f);border-color:#1c2026;color:#fff;text-transform:uppercase;letter-spacing:.5px}
+.mfbtns{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px}
+.chip{border-radius:7px;min-height:42px;border:1px solid #8aa1c6;background:linear-gradient(#fff,#dde6f3);color:#1d3f78;font:700 15px Tahoma,Verdana,sans-serif}
+.chip[aria-pressed="true"]{background:linear-gradient(#7fb3ef,#2a66be);color:#fff;border-color:#1b4a8f}
+.ghost{background:linear-gradient(#fff,#dde6f3);border:1px solid #8aa1c6;border-radius:6px;padding:6px 12px;color:#1d3f78;font:700 14px Tahoma,Verdana,sans-serif}
+.top{margin-bottom:8px}
+.tile{border:1px solid #9fb3d1;border-radius:10px;background:linear-gradient(#ffffff,#e6edf7);min-height:76px}
+.tile:hover{border-color:#3f7fd6;background:linear-gradient(#ffffff,#d9e6f7)}
+.tile .ic{background:linear-gradient(#8cc0f5,#2f6fc4);border:1px solid #1b4a8f;border-radius:10px;width:56px;height:56px;font-size:30px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.tile b{font:700 17px Tahoma,Verdana,sans-serif;color:#1d3f78}
+.tile .s{color:#4a5b78}
+.tiles{gap:8px}
+/* speelveld in MSN-kleuren */
+.mf{background:linear-gradient(#6f8db9,#3e5b8a);border:1px solid #2a4370;border-radius:10px;box-shadow:none;margin-top:0}
+.mf-bw{background:#1a2a4a;border:3px solid #0d182e;border-radius:8px}
+.mf-p{border:2px solid rgba(0,0,0,.35);border-radius:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.mf-r{background:linear-gradient(#ff8a4a 0%,#f0471f 45%,#d12a14 100%)}
+.mf-b{background:linear-gradient(#9ccbf7 0%,#4f97e6 45%,#2a6ac4 100%)}
+.mf.solo .mf-r{background:linear-gradient(#ff8a4a 0%,#f0471f 45%,#d12a14 100%)}
+.mf-av{background:linear-gradient(#f3f5f8,#b9c2cf)!important;border:2px solid rgba(0,0,0,.3);border-radius:50%}
+.mf-nm b{font-family:Tahoma,Verdana,sans-serif;text-transform:uppercase;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.mf-r .mf-nm small,.mf-b .mf-nm small{color:#fff36b;text-shadow:0 1px 1px rgba(0,0,0,.5)}
+.mf-sc{background:rgba(10,20,40,.55);border-radius:8px;padding:2px 8px;font-family:Tahoma,Verdana,sans-serif}
+.mf-bomb{background:rgba(10,20,40,.45);border-radius:8px}
+.mf-p.on{border-color:#ffe14d;box-shadow:0 0 0 3px rgba(255,225,77,.55),inset 0 1px 0 rgba(255,255,255,.35)}
+.mf-m{font-family:Tahoma,Verdana,sans-serif;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.4)}
+.mf-end>div{border:2px solid #2a4370;border-radius:10px;background:linear-gradient(#fff,#e6edf7)}
+.mf-end h2{color:#1d3f78;text-transform:none}
+@media(max-width:600px){.win{margin:0;border-radius:0;border-left:0;border-right:0}.msnbar .tab{display:none}}
+.mf .mf-r,.mf .mf-r.on{background:linear-gradient(#ff8a4a 0%,#f0471f 45%,#d12a14 100%)}
+.mf .mf-b,.mf .mf-b.on{background:linear-gradient(#9ccbf7 0%,#4f97e6 45%,#2a6ac4 100%)}
+.mf .mf-p:not(.on){filter:saturate(.75) brightness(.92)}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20130%22%20width%3D%2264%22%20height%3D%2264%22%3E%3Cpath%20d%3D%22M88%206l5%2013%2013-6-6%2013%2014%205-14%205%206%2013-13-6-5%2013-5-13-13%206%206-13-14-5%2014-5-6-13%2013%206z%22%20fill%3D%22%23ff6a1a%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%222.5%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M88%2015l3%208%208-3-4%208%208%203-8%203%204%208-8-3-3%208-3-8-8%203%204-8-8-3%208-3-4-8%208%203z%22%20fill%3D%22%23ffe14d%22/%3E%3Cpath%20d%3D%22M68%2044c4-6%209-8%2014-12%22%20fill%3D%22none%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M68%2044c4-6%209-8%2014-12%22%20fill%3D%22none%22%20stroke%3D%22%23c9a27a%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%20stroke-dasharray%3D%223%203%22/%3E%3Crect%20x%3D%2250%22%20y%3D%2240%22%20width%3D%2224%22%20height%3D%2216%22%20rx%3D%224%22%20transform%3D%22rotate%2818%2062%2048%29%22%20fill%3D%22%232c4f86%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%223%22/%3E%3Ccircle%20cx%3D%2255%22%20cy%3D%2284%22%20r%3D%2240%22%20fill%3D%22%232f5aa0%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%223.5%22/%3E%3Cpath%20d%3D%22M28%2070a32%2032%200%200%201%2024-24%22%20fill%3D%22none%22%20stroke%3D%22%237fb0ec%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22/%3E%3Cellipse%20cx%3D%2242%22%20cy%3D%2276%22%20rx%3D%229%22%20ry%3D%2211%22%20fill%3D%22%23fff%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%222.5%22/%3E%3Cellipse%20cx%3D%2266%22%20cy%3D%2276%22%20rx%3D%229%22%20ry%3D%2211%22%20fill%3D%22%23fff%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%222.5%22/%3E%3Ccircle%20cx%3D%2245%22%20cy%3D%2278%22%20r%3D%224%22%20fill%3D%22%232b2229%22/%3E%3Ccircle%20cx%3D%2263%22%20cy%3D%2278%22%20r%3D%224%22%20fill%3D%22%232b2229%22/%3E%3Cpath%20d%3D%22M34%2092q21%2022%2042%200z%22%20fill%3D%22%233a1420%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M40%2093h30v4H40z%22%20fill%3D%22%23fff%22/%3E%3Cpath%20d%3D%22M50%20102q6-6%2012%201-6%206-12-1z%22%20fill%3D%22%23ff6f8a%22/%3E%3C/svg%3E"><link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20130%22%20width%3D%2264%22%20height%3D%2264%22%3E%3Cpath%20d%3D%22M88%206l5%2013%2013-6-6%2013%2014%205-14%205%206%2013-13-6-5%2013-5-13-13%206%206-13-14-5%2014-5-6-13%2013%206z%22%20fill%3D%22%23ff6a1a%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%222.5%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M88%2015l3%208%208-3-4%208%208%203-8%203%204%208-8-3-3%208-3-8-8%203%204-8-8-3%208-3-4-8%208%203z%22%20fill%3D%22%23ffe14d%22/%3E%3Cpath%20d%3D%22M68%2044c4-6%209-8%2014-12%22%20fill%3D%22none%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M68%2044c4-6%209-8%2014-12%22%20fill%3D%22none%22%20stroke%3D%22%23c9a27a%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%20stroke-dasharray%3D%223%203%22/%3E%3Crect%20x%3D%2250%22%20y%3D%2240%22%20width%3D%2224%22%20height%3D%2216%22%20rx%3D%224%22%20transform%3D%22rotate%2818%2062%2048%29%22%20fill%3D%22%232c4f86%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%223%22/%3E%3Ccircle%20cx%3D%2255%22%20cy%3D%2284%22%20r%3D%2240%22%20fill%3D%22%232f5aa0%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%223.5%22/%3E%3Cpath%20d%3D%22M28%2070a32%2032%200%200%201%2024-24%22%20fill%3D%22none%22%20stroke%3D%22%237fb0ec%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22/%3E%3Cellipse%20cx%3D%2242%22%20cy%3D%2276%22%20rx%3D%229%22%20ry%3D%2211%22%20fill%3D%22%23fff%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%222.5%22/%3E%3Cellipse%20cx%3D%2266%22%20cy%3D%2276%22%20rx%3D%229%22%20ry%3D%2211%22%20fill%3D%22%23fff%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%222.5%22/%3E%3Ccircle%20cx%3D%2245%22%20cy%3D%2278%22%20r%3D%224%22%20fill%3D%22%232b2229%22/%3E%3Ccircle%20cx%3D%2263%22%20cy%3D%2278%22%20r%3D%224%22%20fill%3D%22%232b2229%22/%3E%3Cpath%20d%3D%22M34%2092q21%2022%2042%200z%22%20fill%3D%22%233a1420%22%20stroke%3D%22%232b2229%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M40%2093h30v4H40z%22%20fill%3D%22%23fff%22/%3E%3Cpath%20d%3D%22M50%20102q6-6%2012%201-6%206-12-1z%22%20fill%3D%22%23ff6f8a%22/%3E%3C/svg%3E"><meta name="apple-mobile-web-app-title" content="Mijnenveger"><meta name="theme-color" content="#fbe9ef"><meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+<div class="win"><div class="msnbar"><b>Mijnenveger Flags</b><span class="tab">Speel offline</span></div><div id="app"></div></div>
+<script>
+var pad=function(n){return String(n).padStart(2,'0')};
+var keyOf=function(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+var rnd=function(a,b){return Math.floor(Math.random()*(b-a+1))+a};
+var pick=function(a){return a[rnd(0,a.length-1)]};
+var shuffle=function(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=rnd(0,i),t=a[i];a[i]=a[j];a[j]=t}return a};
+var $=function(s){return document.querySelector(s)};
+function confetti(q){if(!q){sfx('win');starUp()}if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;var C=['#3c9e68','#4f7aa6','#9b7fd1','#e58bb5','#5bbcbc'],f=document.createDocumentFragment(),i,e;
+ for(i=0;i<26;i++){e=document.createElement('i');e.className='cf';e.style.cssText='left:'+rnd(5,95)+'vw;background:'+pick(C)+';--dx:'+rnd(-60,60)+'px;animation-delay:'+rnd(0,150)+'ms';f.appendChild(e)}
+ document.body.appendChild(f);setTimeout(function(){document.querySelectorAll('.cf').forEach(function(x){x.remove()})},1650)}
+function chips(id,arr,cur){return '<div class="chips" id="'+id+'">'+arr.map(function(a,i){return '<button class="chip" data-v="'+i+'" aria-pressed="'+(i===cur)+'">'+a+'</button>'}).join('')+'</div>'}
+/* oudere Safari: vierkante vakjes en focus naar de kop na een schermwissel */
+(function(){try{var a=document.getElementById('app'),hk='',noAR=!(window.CSS&&CSS.supports&&CSS.supports('aspect-ratio','1/1'));
+ function fixAR(){if(!noAR)return;var l=document.querySelectorAll('[style*="aspect-ratio"]'),i,e,w;for(i=0;i<l.length;i++){e=l[i];e.style.height='';w=e.offsetWidth;if(w)e.style.height=w+'px'}}
+ function foc(){var h=a.querySelector('h1');if(!h)return;var t=h.textContent;if(t===hk)return;hk=t;h.setAttribute('tabindex','-1');try{h.focus({preventScroll:true})}catch(e){}}
+ new MutationObserver(function(){fixAR();foc()}).observe(a,{childList:true});window.addEventListener('resize',fixAR);fixAR()}catch(e){}})();
+var AC;function sfxInit(){AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}
+function sfx(t){if(!SND())return;try{sfxInit();var n=t==='win'?[523,659,784,1047,1319]:[659,880,1319];n.forEach(function(f,i){var o=AC.createOscillator(),g=AC.createGain(),s=AC.currentTime+i*.09;o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(.22,s+.02);g.gain.exponentialRampToValueAtTime(.001,s+(t==='win'?.3:.22));o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+.32)})}catch(e){}}
+function bombSvg(s){return '<svg viewBox="0 0 120 130" width="'+s+'" height="'+s+'" aria-hidden="true" style="display:block;overflow:visible"><path d="M88 6l5 13 13-6-6 13 14 5-14 5 6 13-13-6-5 13-5-13-13 6 6-13-14-5 14-5-6-13 13 6z" fill="#ff6a1a" stroke="#2b2229" stroke-width="2.5" stroke-linejoin="round"/><path d="M88 15l3 8 8-3-4 8 8 3-8 3 4 8-8-3-3 8-3-8-8 3 4-8-8-3 8-3-4-8 8 3z" fill="#ffe14d"/><path d="M68 44c4-6 9-8 14-12" fill="none" stroke="#2b2229" stroke-width="8" stroke-linecap="round"/><path d="M68 44c4-6 9-8 14-12" fill="none" stroke="#c9a27a" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="3 3"/><rect x="50" y="40" width="24" height="16" rx="4" transform="rotate(18 62 48)" fill="#2c4f86" stroke="#2b2229" stroke-width="3"/><circle cx="55" cy="84" r="40" fill="#2f5aa0" stroke="#2b2229" stroke-width="3.5"/><path d="M28 70a32 32 0 0 1 24-24" fill="none" stroke="#7fb0ec" stroke-width="6" stroke-linecap="round"/><ellipse cx="42" cy="76" rx="9" ry="11" fill="#fff" stroke="#2b2229" stroke-width="2.5"/><ellipse cx="66" cy="76" rx="9" ry="11" fill="#fff" stroke="#2b2229" stroke-width="2.5"/><circle cx="45" cy="78" r="4" fill="#2b2229"/><circle cx="63" cy="78" r="4" fill="#2b2229"/><path d="M34 92q21 22 42 0z" fill="#3a1420" stroke="#2b2229" stroke-width="3" stroke-linejoin="round"/><path d="M40 93h30v4H40z" fill="#fff"/><path d="M50 102q6-6 12 1-6 6-12-1z" fill="#ff6f8a"/></svg>'}
+
+
+/* ---------- Mijnenveger Flags (in de stijl van MSN Minesweeper Flags) ---------- */
+var MFC={1:'#e5484d',2:'#2f7fe0'};
+function mfFlag(c){return '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="2.5" width="1.8" height="15" rx=".9" fill="#2b2229"/><path d="M6.8 3 L17 6.8 L6.8 10.8z" fill="'+c+'" stroke="#2b2229" stroke-width=".8" stroke-linejoin="round"/><rect x="2.5" y="16.3" width="8" height="2.4" rx="1.2" fill="#2b2229"/></svg>'}
+function mijnenFlags(){app.classList.add('wide');
+ var lv=data.mfLv==null?1:data.mfLv,sl=data.mfSolo==null?1:data.mfSolo;
+ app.innerHTML='<div class="mfh">'+bombSvg(64)+'<h1>Mijnenveger Flags</h1></div><p class="sub">Om de beurt tik je een vakje open. Raak je een mijn, dan is die van jou en ben je nog een keer. Wie als eerste <b>26 van de 51 mijnen</b> heeft, wint. Sta je achter? Dan mag je één keer je bom gooien: die opent een vak van 5 × 5.</p><div class="tiles">'+tile('twee','👥','2 spelers','Om de beurt op dit toestel: rood tegen blauw')+tile('cpu','🤖','Tegen de computer','Jij bent rood, de computer is blauw')+tile('solo','🙋','Alleen','Klassieke mijnenveger: ontwijk alle mijnen')+'</div><h2>Niveau van de computer</h2>'+chips('mlv',['Makkelijk','Gemiddeld','Moeilijk'],lv)+'<h2>Alleen spelen</h2>'+chips('msl',['Klein · 9 × 9','Gemiddeld · 16 × 16','Moeilijk · 16 × 16'],sl);
+
+ document.querySelectorAll('.tile[data-m]').forEach(function(b){b.onclick=function(){mfPlay(b.dataset.m)}});
+ document.querySelectorAll('#mlv .chip').forEach(function(c){c.onclick=function(){data.mfLv=Number(c.dataset.v);save();mijnenFlags()}});
+ document.querySelectorAll('#msl .chip').forEach(function(c){c.onclick=function(){data.mfSolo=Number(c.dataset.v);save();mijnenFlags()}})}
+
+function mfPlay(mode){app.classList.add('wide');
+ var solo=mode==='solo',si=data.mfSolo==null?1:data.mfSolo,SL=[[9,9,10],[16,16,40],[16,16,60]][si],
+  W=solo?SL[0]:16,H=solo?SL[1]:16,M=solo?SL[2]:51,WIN=26,N=W*H,lv=data.mfLv==null?1:data.mfLv,
+  mine=[],num=[],op=[],own=[],fl=[],i,turn=1,sc={1:0,2:0},bomb={1:true,2:true},bm=false,bt=-1,last=-1,
+  over=false,res=0,quit=false,busy=false,first=true,t0=0,tm=null,fm=false,boom=-1,rz=false,hideEnd=false,msg='',lp=null,lpDone=false;
+ for(i=0;i<N;i++){mine.push(false);num.push(0);op.push(0);own.push(0);fl.push(0)}
+ function nb(k){var r=k/W|0,c=k%W,o=[],y,x;for(y=r-1;y<=r+1;y++)for(x=c-1;x<=c+1;x++)if(y>=0&&y<H&&x>=0&&x<W&&(y!==r||x!==c))o.push(y*W+x);return o}
+ function place(safe){var n=0,k;while(n<M){k=rnd(0,N-1);if(!mine[k]&&safe.indexOf(k)<0){mine[k]=true;n++}}for(k=0;k<N;k++)num[k]=nb(k).filter(function(j){return mine[j]}).length}
+ function flood(k){var st=[k],q;while(st.length){q=st.pop();if(op[q]||own[q]||fl[q]||mine[q])continue;op[q]=1;if(num[q]===0)nb(q).forEach(function(j){if(!op[j])st.push(j)})}}
+ function other(p){return p===1?2:1}
+ function left(){return M-sc[1]-sc[2]}
+ function name(p){return mode==='cpu'?(p===1?'Jij':'Computer'):(p===1?'Rood':'Blauw')}
+ function canBomb(p){return !solo&&!over&&bomb[p]&&sc[p]<sc[other(p)]}
+ function isHuman(p){return mode!=='cpu'||p===1}
+ if(!solo){place([]);turn=Math.random()<.5?1:2;msg=name(turn)+(mode==='cpu'&&turn===1?' begint.':' begint.')}
+
+ /* ---- spelregels ---- */
+ function endCheck(){if(sc[1]>=WIN||sc[2]>=WIN){over=true;res=sc[1]>=WIN?1:2;bm=false;bt=-1;if(isHuman(res))confetti(1);sfx('win')}}
+ function move(k,p){if(op[k]||own[k])return false;last=k;
+  if(mine[k]){op[k]=1;own[k]=p;sc[p]++;sfx('ok');endCheck();return true}
+  flood(k);turn=other(p);return false}
+ function doBomb(k,p){var r=k/W|0,c=k%W,y,x,q,got=0;bomb[p]=false;bm=false;bt=-1;
+  for(y=r-2;y<=r+2;y++)for(x=c-2;x<=c+2;x++)if(y>=0&&y<H&&x>=0&&x<W){q=y*W+x;if(op[q]||own[q])continue;if(mine[q]){op[q]=1;own[q]=p;sc[p]++;got++}else flood(q)}
+  last=k;sfx(got?'win':'ok');msg='💥 '+name(p)+(p===1&&mode==='cpu'?' gooide':' gooide')+' de bom en vond '+got+(got===1?' mijn.':' mijnen.');endCheck();if(!over)turn=other(p)}
+
+ /* ---- computer ---- */
+ function analyze(deep){var S={},Mi={},cons=[],k,ch=true,loops=0;
+  for(k=0;k<N;k++)if(op[k]&&!own[k]&&num[k]>0){var u=[],kn=0;nb(k).forEach(function(j){if(own[j])kn++;else if(!op[j])u.push(j)});if(u.length)cons.push({c:u,n:num[k]-kn})}
+  while(ch&&loops++<40){ch=false;
+   cons.forEach(function(o){var c2=[],n2=o.n;o.c.forEach(function(j){if(Mi[j])n2--;else if(!S[j])c2.push(j)});o.c=c2;o.n=n2});
+   cons=cons.filter(function(o){return o.c.length});
+   cons.forEach(function(o){if(o.n===o.c.length)o.c.forEach(function(j){if(!Mi[j]){Mi[j]=1;ch=true}});else if(o.n===0)o.c.forEach(function(j){if(!S[j]){S[j]=1;ch=true}})});
+   if(!ch&&deep){for(var a=0;a<cons.length&&!ch;a++)for(var b=0;b<cons.length&&!ch;b++){var A=cons[a],B=cons[b];if(a===b||A.c.length>=B.c.length)continue;
+     if(!A.c.every(function(j){return B.c.indexOf(j)>-1}))continue;var d=B.c.filter(function(j){return A.c.indexOf(j)<0}),dn=B.n-A.n;
+     if(dn===d.length){d.forEach(function(j){Mi[j]=1});ch=true}else if(dn===0){d.forEach(function(j){S[j]=1});ch=true}}}}
+  var P={},fr={},others=[],exp=0,rem=left()-Object.keys(Mi).length;
+  cons.forEach(function(o){var p=o.n/o.c.length;o.c.forEach(function(j){fr[j]=1;P[j]=Math.max(P[j]||0,p)})});
+  Object.keys(fr).forEach(function(j){if(!Mi[j]&&!S[j])exp+=P[j]});
+  for(k=0;k<N;k++)if(!op[k]&&!own[k]&&!Mi[k]&&!S[k]&&!fr[k])others.push(k);
+  var dens=others.length?Math.max(0,Math.min(1,(rem-exp)/others.length)):0;
+  others.forEach(function(j){P[j]=dens});Object.keys(Mi).forEach(function(j){P[j]=1});Object.keys(S).forEach(function(j){P[j]=0});
+  return {Mi:Object.keys(Mi).map(Number),P:P}}
+ function cpuPick(){var a=analyze(lv>=2),cand=[],k,best=-1;
+  if(lv===0&&Math.random()<.4){for(k=0;k<N;k++)if(!op[k]&&!own[k])cand.push(k);return {k:pick(cand)}}
+  if(a.Mi.length&&(lv>0||Math.random()<.6))return {k:pick(a.Mi)};
+  if(lv>=1&&canBomb(2)){var bb=-1,bv=0,y,x,q;for(k=0;k<N;k++){var r=k/W|0,c=k%W,v=0;for(y=r-2;y<=r+2;y++)for(x=c-2;x<=c+2;x++)if(y>=0&&y<H&&x>=0&&x<W){q=y*W+x;if(!op[q]&&!own[q])v+=a.P[q]||0}if(v>bv){bv=v;bb=k}}
+   if(bb>-1&&bv>=(lv===2?3:3.5)&&(sc[1]-sc[2]>=3||sc[1]>=18))return {k:bb,bomb:true}}
+  for(k=0;k<N;k++)if(!op[k]&&!own[k]){var p=(a.P[k]==null?.2:a.P[k])+Math.random()*(lv===0?.35:.02);if(p>best){best=p;cand=[k]}}
+  return {k:cand[0]}}
+ function cpuGo(){if(mode!=='cpu'||over||turn!==2)return;busy=true;draw();setTimeout(cpuStep,750)}
+ function cpuStep(){if(!$('#mfb')||over){busy=false;return}var m=cpuPick();
+  if(m.bomb)doBomb(m.k,2);else{var hit=move(m.k,2);msg=hit?(over?'':'De computer vond een mijn en is nog een keer.'):''}
+  if(!over&&turn===2){draw();setTimeout(cpuStep,750)}else{busy=false;draw()}}
+
+ /* ---- alleen spelen ---- */
+ function secs(){return t0?Math.floor((Date.now()-t0)/1000):0}
+ function lose(k){boom=k;over=true;res=-1;clearInterval(tm);draw()}
+ function soloWin(){var n=0,k;for(k=0;k<N;k++)if(op[k])n++;if(n===N-M){over=true;res=1;clearInterval(tm);var s=secs(),bst=data.mfBest=data.mfBest||{};msg=(!bst[si]||s<bst[si])?'Nieuw record!':'Record: '+bst[si]+' s';if(!bst[si]||s<bst[si]){bst[si]=s;save()}for(k=0;k<N;k++)if(mine[k])fl[k]=1;confetti(1)}}
+ function soloTap(k,flag){if(over)return;
+  if(flag||fm){if(op[k])return;fl[k]=fl[k]?0:1;draw();return}
+  if(fl[k])return;
+  if(first){place(nb(k).concat(k));first=false;t0=Date.now();tm=setInterval(function(){var e=$('#mft');if(!e){clearInterval(tm);return}if(!over)e.textContent=secs()},1000)}
+  if(op[k]){if(!num[k]||nb(k).filter(function(j){return fl[j]}).length!==num[k])return;var bad=-1;nb(k).forEach(function(j){if(!fl[j]&&!op[j]){if(mine[j])bad=j;else flood(j)}});if(bad>-1)return lose(bad)}
+  else if(mine[k])return lose(k);else flood(k);
+  last=k;soloWin();draw()}
+
+ /* ---- tikken ---- */
+ function tap(k){if(solo)return soloTap(k,false);if(over||busy||!isHuman(turn))return;
+  if(bm){if(bt===k){doBomb(k,turn);draw();cpuGo();return}bt=k;msg='Tik nog een keer op dit vak om de bom te gooien.';draw();return}
+  if(op[k]||own[k])return;var p=turn,hit=move(k,p);rz=false;
+  msg=hit?(over?'':name(p)+(mode==='cpu'?' vond een mijn! Je bent nog een keer.':' vond een mijn en is nog een keer.')):(mode==='twee'?name(turn)+' is aan de beurt.':'');
+  draw();cpuGo()}
+
+ /* ---- tekenen ---- */
+ function cell(k){var cls='mf-c',h='',pv=false;
+  if(bm&&bt>-1)pv=Math.abs((k/W|0)-(bt/W|0))<=2&&Math.abs(k%W-bt%W)<=2;
+  if(own[k]){cls+=' f';h=mfFlag(MFC[own[k]])}
+  else if(op[k]){cls+=' o';if(num[k]){h=num[k];cls+=' n'+num[k]}}
+  else if(over&&mine[k]&&!(solo&&fl[k])){cls+=k===boom?' x':' o';h='💣'}
+  else if(over&&solo&&fl[k]&&!mine[k]){cls+=' o';h='❌'}
+  else{cls+=' c';if(fl[k])h=mfFlag(MFC[1])}
+  if(k===last&&!solo)cls+=' l';if(pv)cls+=' pv';
+  return '<button class="'+cls+'" data-k="'+k+'" aria-label="rij '+((k/W|0)+1)+' kolom '+(k%W+1)+'">'+h+'</button>'}
+ function pan(p){var on=!over&&turn===p,cb=canBomb(p)&&on&&isHuman(p)&&!busy,av=mode==='cpu'?(p===1?'🙂':'🤖'):(p===1?'🔴':'🔵'),
+   st=over?(res===p?'🏆 winnaar!':''):on?(busy&&p===2?'denkt na…':'aan de beurt'):(bomb[p]?'':'bom gebruikt');
+  return '<div class="mf-p mf-'+(p===1?'r':'b')+(on?' on':'')+'"><div class="mf-av">'+av+'</div><div class="mf-nm"><b>'+name(p)+'</b><small>'+st+'</small></div><div class="mf-sc">'+mfFlag(MFC[p])+'<b>'+sc[p]+'</b></div><button class="mf-bomb'+(bm&&on?' act':'')+'" data-bomb="'+p+'"'+(cb?'':' disabled')+' aria-label="Bom gooien" title="'+(bomb[p]?'Bom: alleen als je achter staat':'De bom is al gebruikt')+'">'+(bomb[p]?bombSvg(34):'✖️')+'</button></div>'}
+ function endBox(){var t,s='';
+  if(solo){t=res===1?'Gewonnen! 🎉':'Boem! 💥';s=res===1?'Alle mijnen ontweken in '+secs()+' seconden. '+msg:'Je raakte een mijn.'}
+  else{t=mode==='cpu'?(res===1?'Jij wint! 🎉':'De computer wint'):name(res)+' wint! 🎉';s=(quit?name(other(res))+' gaf op. ':'')+'Rood '+sc[1]+' – '+sc[2]+' Blauw'}
+  return '<div class="mf-end"><div><h2>'+t+'</h2><p class="sub">'+s+'</p><button class="btn" id="mfa">Nog een keer</button><button class="btn alt" id="mfv">Bekijk het bord</button><button class="btn alt" id="mfm">Andere spelvorm</button></div></div>'}
+ function draw(){var nf=fl.filter(Boolean).length,mid;
+  if(solo)mid=(over?'':'Tik om te openen. Houd ingedrukt, rechtsklik of zet 🚩 aan voor een vlag.')+(msg&&!over?'<br>'+msg:'');
+  else mid='Nog <b>'+left()+'</b> mijnen · <b>'+WIN+'</b> nodig om te winnen'+(bm?'<br><b>💣 Kies waar de bom moet vallen.</b>':'')+(msg?'<br>'+msg:'');
+  var panels=solo?'<div class="mf-p mf-r on"><div class="mf-av">🙋</div><div class="mf-nm"><b>Jij</b><small>'+(over?(res===1?'🏆 gewonnen':'💥 boem'):'')+'</small></div><div class="mf-sc">'+mfFlag(MFC[1])+'<b>'+(M-nf)+'</b></div><div class="mf-sc">⏱️<b id="mft">'+secs()+'</b></div><button class="mf-bomb'+(fm?' act':'')+'" id="mffm" aria-pressed="'+fm+'" aria-label="Vlag-stand" title="Vlag-stand">🚩</button></div>':pan(2)+pan(1);
+  app.innerHTML=OTOP+'<h1>Mijnenveger Flags</h1><div class="mf'+(solo?' solo':'')+'">'+panels+'<div class="mf-m">'+mid+'</div><div class="mf-bw"><div class="mf-bd" id="mfb" style="grid-template-columns:repeat('+W+',minmax(0,1fr))">'+Array.apply(null,Array(N)).map(function(_,k){return cell(k)}).join('')+'</div>'+(over&&!hideEnd?endBox():'')+'</div></div><div class="mfbtns">'+
+   (over?'<button class="btn" id="mfa2">Nog een keer</button>':(solo?'':'<button class="btn rs" id="mfr">'+(rz?'Zeker weten? Tik nog eens':'Opgeven')+'</button>')+'<button class="btn alt" id="mfn">Nieuw spel</button>')+'<button class="btn alt" id="mfm2">Andere spelvorm</button></div>';
+  var bye=function(){clearInterval(tm);over=true},again=function(){bye();mfPlay(mode)},menu=function(){bye();mijnenFlags()};
+  $('#bk').onclick=menu;$('#mfm2').onclick=menu;
+  if($('#mfa'))$('#mfa').onclick=again;if($('#mfa2'))$('#mfa2').onclick=again;if($('#mfn'))$('#mfn').onclick=again;if($('#mfm'))$('#mfm').onclick=menu;
+  if($('#mfv'))$('#mfv').onclick=function(){hideEnd=true;draw()};
+  if($('#mfr'))$('#mfr').onclick=function(){if(busy)return;if(!rz){rz=true;draw();return}quit=true;over=true;res=mode==='cpu'?2:other(turn);bm=false;draw()};
+  if($('#mffm'))$('#mffm').onclick=function(){fm=!fm;draw()};
+  document.querySelectorAll('[data-bomb]').forEach(function(b){b.onclick=function(){var p=Number(b.dataset.bomb);if(p!==turn||!canBomb(p)||busy)return;bm=!bm;bt=-1;msg='';draw()}});
+  var bd=$('#mfb');
+  bd.onclick=function(e){var t=e.target.closest('[data-k]');if(!t)return;if(lpDone){lpDone=false;return}tap(Number(t.dataset.k))};
+  if(solo){bd.oncontextmenu=function(e){e.preventDefault();var t=e.target.closest('[data-k]');if(t)soloTap(Number(t.dataset.k),true)};
+   bd.onpointerdown=function(e){if(e.pointerType==='mouse')return;var t=e.target.closest('[data-k]');if(!t)return;lpDone=false;clearTimeout(lp);lp=setTimeout(function(){lpDone=true;soloTap(Number(t.dataset.k),true);try{navigator.vibrate&&navigator.vibrate(30)}catch(x){}},420)};
+   bd.onpointerup=bd.onpointercancel=bd.onpointerleave=function(){clearTimeout(lp)}}}
+ draw();cpuGo()}
+
+var data={lv:{}};try{var _d=JSON.parse(localStorage.getItem('mijnenveger-flags-v1'));if(_d&&typeof _d==='object'&&!Array.isArray(_d))data=_d}catch(e){}
+function save(){try{localStorage.setItem('mijnenveger-flags-v1',JSON.stringify(data))}catch(e){}}
+function starUp(){}
+function SND(){try{return localStorage.getItem('mijnenveger-geluid')!=='uit'}catch(e){return true}}
+function tile(id,ic,t,s){return '<button class="tile" data-m="'+id+'"><span class="ic">'+ic+'</span><span><b>'+t+'</b><br><span class="s">'+s+'</span></span></button>'}
+var OTOP='<div class="top"><button class="ghost" id="bk">‹ Opties</button></div>';
+function ouderMenu(){mijnenFlags()}
+(function(){var u0=false;document.addEventListener('pointerdown',function(){if(u0)return;u0=true;try{sfxInit()}catch(e){}})})();
+document.querySelector('.msnbar').insertAdjacentHTML('afterbegin',bombSvg(40));
+mijnenFlags();
+
+</script>
+</body>
+</html>
